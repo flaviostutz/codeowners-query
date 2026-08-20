@@ -20,6 +20,9 @@ test:
 	cd usage-basic && node index.js
 	$(MAKE) -C usage-cli test
 
+lint:
+	@echo '>>> examples: lint. Nothing to lint'
+
 clean:
 	@echo '>>> examples: clean'
 	rm -rf node_modules
