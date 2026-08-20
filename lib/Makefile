@@ -36,6 +36,7 @@ lint:
 	@echo '>>> lib: lint'
 	@mkdir -p $(CACHE_DIR)/eslint
 	$(MISE) pnpm exec eslint ./src --cache --cache-location $(CACHE_DIR)/eslint/.eslintcache
+	$(MISE) pnpm audit
 
 lint-fix:
 	@echo '>>> lib: lint-fix'
