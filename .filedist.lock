@@ -1,0 +1,94 @@
+version: 1
+packages:
+  agentme: 0.32.0
+  xdrs-core@0.42.0: 0.42.0
+sets:
+  - package: agentme
+    output: {}
+    selector: {}
+files:
+  .:
+    - .xdrs/_core/adrs/index.md|xdrs-core|0.42.0|file|d8d2708f8c1d|0
+    - .xdrs/_core/adrs/principles/001-xdrs-core.md|xdrs-core|0.42.0|file|2296e5b1254b|0
+    - .xdrs/_core/adrs/principles/002-policy-standards.md|xdrs-core|0.42.0|file|da9e67cd368e|0
+    - .xdrs/_core/adrs/principles/003-skill-standards.md|xdrs-core|0.42.0|file|923d638c9f01|0
+    - .xdrs/_core/adrs/principles/004-article-standards.md|xdrs-core|0.42.0|file|7716fe005402|0
+    - .xdrs/_core/adrs/principles/005-semantic-versioning-for-xdrs-packages.md|xdrs-core|0.42.0|file|57c9bbb2af53|0
+    - .xdrs/_core/adrs/principles/006-research-standards.md|xdrs-core|0.42.0|file|122304c9dab2|0
+    - .xdrs/_core/adrs/principles/007-plan-standards.md|xdrs-core|0.42.0|file|35a5617fee1f|0
+    - .xdrs/_core/adrs/principles/008-policy-structured-standards.md|xdrs-core|0.42.0|file|f05b6d4421c7|0
+    - .xdrs/_core/adrs/principles/009-presentation-standards.md|xdrs-core|0.42.0|file|51baf074b777|0
+    - .xdrs/_core/adrs/principles/010-scope-governance.md|xdrs-core|0.42.0|file|53388e671fd6|0
+    - .xdrs/_core/adrs/principles/011-core-scope-type.md|xdrs-core|0.42.0|file|daae7fa6f1f8|0
+    - .xdrs/_core/adrs/principles/012-reference-scope-type.md|xdrs-core|0.42.0|file|825f286e85a6|0
+    - .xdrs/_core/adrs/principles/013-platform-scope-type.md|xdrs-core|0.42.0|file|8acc355177c7|0
+    - .xdrs/_core/adrs/principles/014-standard-scope-type.md|xdrs-core|0.42.0|file|4d350c74e7d4|0
+    - .xdrs/_core/adrs/principles/015-local-scope-type.md|xdrs-core|0.42.0|file|d48a4585c0b1|0
+    - .xdrs/_core/adrs/principles/016-policy-subjects.md|xdrs-core|0.42.0|file|59f33367821c|0
+    - .xdrs/_core/adrs/principles/017-policy-numbering-ranges.md|xdrs-core|0.42.0|file|5c6febe306e6|0
+    - .xdrs/_core/adrs/principles/018-external-path-symlinks.md|xdrs-core|0.42.0|file|27bd55bed09f|0
+    - .xdrs/_core/adrs/principles/articles/.assets/001-xdrs-overview-slides.md|xdrs-core|0.42.0|file|d4071aa47a37|0
+    - .xdrs/_core/adrs/principles/articles/001-xdrs-overview.md|xdrs-core|0.42.0|file|346ac011e9b5|0
+    - .xdrs/_core/adrs/principles/skills/001-review/SKILL.md|xdrs-core|0.42.0|file|388a4aaed1d0|0
+    - .xdrs/_core/adrs/principles/skills/002-write-policy/SKILL.md|xdrs-core|0.42.0|file|f76aad418ee9|0
+    - .xdrs/_core/adrs/principles/skills/003-write-skill/SKILL.md|xdrs-core|0.42.0|file|92a508372639|0
+    - .xdrs/_core/adrs/principles/skills/004-write-article/SKILL.md|xdrs-core|0.42.0|file|557d2e29a8bf|0
+    - .xdrs/_core/adrs/principles/skills/005-write-research/SKILL.md|xdrs-core|0.42.0|file|853e200adab2|0
+    - .xdrs/_core/adrs/principles/skills/006-write-plan/SKILL.md|xdrs-core|0.42.0|file|95d3eeb77921|0
+    - .xdrs/_core/adrs/principles/skills/007-write-presentation/SKILL.md|xdrs-core|0.42.0|file|502cffaf38bc|0
+    - .xdrs/_core/adrs/principles/skills/008-write-xdrs-doc/SKILL.md|xdrs-core|0.42.0|file|5fd25f668a47|0
+    - .xdrs/_core/index.md|xdrs-core|0.42.0|file|16994d1e7d93|0
+    - AGENTS.md|xdrs-core|0.42.0|file|4957a7502eef|0
+    - .xdrs/agentme/edrs/application/skills/010-select-relevant-xdrs/SKILL.md|agentme|0.32.0|file|329a631e930c|0
+    - .xdrs/agentme/edrs/application/.assets/126-overview.svg|agentme|0.32.0|file|3fe3eabff000|0
+    - .xdrs/agentme/edrs/application/101-javascript-project-tooling.md|agentme|0.32.0|file|7cedbc977eab|0
+    - .xdrs/agentme/edrs/application/102-golang-project-tooling.md|agentme|0.32.0|file|3a370b766d26|0
+    - .xdrs/agentme/edrs/application/103-python-project-tooling.md|agentme|0.32.0|file|ee273249a9e8|0
+    - .xdrs/agentme/edrs/application/104-cli-tool-standards.md|agentme|0.32.0|file|ff3b93b84cb6|0
+    - .xdrs/agentme/edrs/application/121-coding-best-practices.md|agentme|0.32.0|file|ad8bc74a18e9|0
+    - .xdrs/agentme/edrs/application/122-unit-test-requirements.md|agentme|0.32.0|file|49b42cb5f619|0
+    - .xdrs/agentme/edrs/application/123-error-handling.md|agentme|0.32.0|file|5f279b7a2eec|0
+    - .xdrs/agentme/edrs/application/124-secrets-management.md|agentme|0.32.0|file|c3ec7deee36b|0
+    - .xdrs/agentme/edrs/application/125-coding-abstraction-practices.md|agentme|0.32.0|file|94b8a6a0bc0e|0
+    - .xdrs/agentme/edrs/application/126-pragmatic-hexagonal-architecture.md|agentme|0.32.0|file|19480ab75fd9|0
+    - .xdrs/agentme/edrs/application/127-external-system-adapter-skills.md|agentme|0.32.0|file|f9dcb2f0460a|0
+    - .xdrs/agentme/edrs/application/141-ai-llm-development-standards.md|agentme|0.32.0|file|a83eb0458467|0
+    - .xdrs/agentme/edrs/application/142-ai-agents-development-standards.md|agentme|0.32.0|file|db4bfc4427e2|0
+    - .xdrs/agentme/edrs/application/143-ai-agents-quality-standards.md|agentme|0.32.0|file|0a36359e354e|0
+    - .xdrs/agentme/edrs/application/144-ai-workflow-development-standards.md|agentme|0.32.0|file|1d3d6d04df44|0
+    - .xdrs/agentme/edrs/application/145-ai-workflow-naming-conventions.md|agentme|0.32.0|file|356ebfc540af|0
+    - .xdrs/agentme/edrs/application/146-ai-agent-xdrs-knowledge-layer.md|agentme|0.32.0|file|d7f1119c299c|0
+    - .xdrs/agentme/edrs/application/151-ai-eval-standards.md|agentme|0.32.0|file|286c21664839|0
+    - .xdrs/agentme/edrs/application/152-ai-test-types-taxonomy.md|agentme|0.32.0|file|b8541f85ae03|0
+    - .xdrs/agentme/edrs/application/153-ai-eval-script.md|agentme|0.32.0|file|62fe219925f8|0
+    - .xdrs/agentme/edrs/application/154-ai-eval-report-format.md|agentme|0.32.0|file|a000f389d060|0
+    - .xdrs/agentme/edrs/application/155-ai-eval-repeatability.md|agentme|0.32.0|file|84ed19048353|0
+    - .xdrs/agentme/edrs/application/156-ai-eval-fairness-bias.md|agentme|0.32.0|file|b80923d0ea9f|0
+    - .xdrs/agentme/edrs/application/skills/050-create-javascript-project/SKILL.md|agentme|0.32.0|file|5de74beae4a1|0
+    - .xdrs/agentme/edrs/application/skills/051-create-golang-project/SKILL.md|agentme|0.32.0|file|a520ab9a180b|0
+    - .xdrs/agentme/edrs/application/skills/052-create-python-project/SKILL.md|agentme|0.32.0|file|3cd0a07ece43|0
+    - .xdrs/agentme/edrs/application/skills/200-run-skill-tests/SKILL.md|agentme|0.32.0|file|e2353e8a56b5|0
+    - .xdrs/agentme/edrs/application/skills/200-run-skill-tests/SKILL.test.md|agentme|0.32.0|file|9d27f522d4a8|0
+    - .xdrs/agentme/edrs/data/201-ml-dataset-structure.md|agentme|0.32.0|file|b6b39135bce6|0
+    - .xdrs/agentme/edrs/governance/501-project-quality-standards.md|agentme|0.32.0|file|b5333f0101a3|0
+    - .xdrs/agentme/edrs/governance/502-contributing-guide-requirements.md|agentme|0.32.0|file|435cf4b39125|0
+    - .xdrs/agentme/edrs/index.md|agentme|0.32.0|file|5e0fa134591f|0
+    - .xdrs/agentme/edrs/operations/401-service-health-check-endpoint.md|agentme|0.32.0|file|120bfac39b3d|0
+    - .xdrs/agentme/edrs/platform/301-monorepo-structure.md|agentme|0.32.0|file|6d7cc482b74a|0
+    - .xdrs/agentme/edrs/platform/302-github-pipelines.md|agentme|0.32.0|file|4898086c035e|0
+    - .xdrs/agentme/edrs/platform/303-common-targets.md|agentme|0.32.0|file|d275f8ff23a8|0
+    - .xdrs/agentme/edrs/platform/304-tool-execution-and-scripting.md|agentme|0.32.0|file|aeb122abb34f|0
+    - .xdrs/agentme/edrs/platform/305-environment-variable-configuration.md|agentme|0.32.0|file|bbb9db90d2fd|0
+    - .xdrs/agentme/edrs/platform/skills/053-monorepo-setup/SKILL.md|agentme|0.32.0|file|e76e045d1c10|0
+    - .xdrs/agentme/edrs/principles/012-continuous-xdr-enrichment.md|agentme|0.32.0|file|f5bcfaf069fc|0
+    - .xdrs/agentme/edrs/principles/016-cross-language-module-structure.md|agentme|0.32.0|file|89e9efcdf273|0
+    - .xdrs/agentme/edrs/principles/017-skill-testing.md|agentme|0.32.0|file|99f5b7bef056|0
+    - .xdrs/agentme/edrs/principles/articles/001-continuous-xdr-improvement.md|agentme|0.32.0|file|27f6e33c5b0f|0
+    - .xdrs/agentme/edrs/principles/skills/150-plan-mode-consistency/SKILL.md|agentme|0.32.0|file|070f7824d3d3|0
+    - .xdrs/agentme/edrs/principles/skills/150-plan-mode-consistency/SKILL.test.md|agentme|0.32.0|file|9cfa5134481c|0
+    - .xdrs/agentme/index.md|agentme|0.32.0|file|e622f409614c|0
+    - .agents/skills/001-review|xdrs-core|0.42.0|symlink|18c5f3a037d4|0
+    - .agents/skills/008-write-xdrs-doc|xdrs-core|0.42.0|symlink|c3a23ff52f24|0
+    - .agents/skills/150-plan-mode-consistency|agentme|0.32.0|symlink|dff39767b6c5|0
+checksum: 502ecc13d166
+

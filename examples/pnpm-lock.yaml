@@ -1,0 +1,55 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .:
+    dependencies:
+      codeowners-query:
+        specifier: file:/Users/flaviostutz/Documents/development/flaviostutz/codeowners-query/lib/dist/codeowners-query-0.0.1.tgz
+        version: file:../lib/dist/codeowners-query-0.0.1.tgz
+
+packages:
+
+  balanced-match@4.0.4:
+    resolution: {integrity: sha512-BLrgEcRTwX2o6gGxGOCNyMvGSp35YofuYzw9h1IMTRmKqttAZZVU67bdb9Pr2vUHA8+j3i2tJfjO6C6+4myGTA==}
+    engines: {node: 18 || 20 || >=22}
+
+  brace-expansion@5.0.9:
+    resolution: {integrity: sha512-ScQ4IuvIEF1TMlP7Zt+vjJ//9zlPb2SDcxWxM3bk8s6t6GGdJ7KO1dCcTidOPJKePW30LE/2cT7wCyPho9/Wxg==}
+    engines: {node: 20 || >=22}
+
+  codeowners-query@file:../lib/dist/codeowners-query-0.0.1.tgz:
+    resolution: {integrity: sha512-eL3+Wt7ux4HDMJb7dXESvy98ABbxV3V8mtpj9394ew2KRwY9BIp1ABATxRvtEqnecES3bVsTfOhAPMrgT27dpg==, tarball: file:../lib/dist/codeowners-query-0.0.1.tgz}
+    version: 0.0.1
+    hasBin: true
+
+  commander@13.1.0:
+    resolution: {integrity: sha512-/rFeCpNJQbhSZjGVwO9RFV3xPqbnERS8MmIQzCtD/zl6gpJuV/bMLuN92oG3F7d8oDEHHRrujSXNUr8fpjntKw==}
+    engines: {node: '>=18'}
+
+  minimatch@10.2.6:
+    resolution: {integrity: sha512-vpLQEs+VLCr1nU0BXS07maYoFwlDAH0gngQuuttxIwutDFEMHq2blX+8vpgxDdK3J1PwjCJiep77OitTZ4Ll1A==}
+    engines: {node: 18 || 20 || >=22}
+
+snapshots:
+
+  balanced-match@4.0.4: {}
+
+  brace-expansion@5.0.9:
+    dependencies:
+      balanced-match: 4.0.4
+
+  codeowners-query@file:../lib/dist/codeowners-query-0.0.1.tgz:
+    dependencies:
+      commander: 13.1.0
+      minimatch: 10.2.6
+
+  commander@13.1.0: {}
+
+  minimatch@10.2.6:
+    dependencies:
+      brace-expansion: 5.0.9

@@ -1,0 +1,28 @@
+name: release
+
+on:
+  workflow_dispatch:
+    inputs:
+      prerelease:
+        description: 'Pre-release'
+        type: boolean
+        default: true
+
+jobs:
+  create-tag:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          # personal token required so the pushed tag triggers publish.yml
+          # create a personal token and set a secret named GH_PERSONAL_TOKEN
+          # https://github.com/orgs/community/discussions/27028
+          token: ${{ secrets.GH_PERSONAL_TOKEN }}
+      - name: Create tag and push to repo
+        run: |
+          git config --global user.email "noreply@github.com"
+          git config --global user.name "Github Workflow"
+          npx -y monotag@latest tag-push ${{ inputs.prerelease == true && '--pre-release' || '' }}

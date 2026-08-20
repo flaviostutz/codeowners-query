@@ -1,0 +1,10 @@
+{
+  "name": "usage-basic",
+  "version": "1.0.0",
+  "description": "Basic usage example for codeowners-query",
+  "type": "module",
+  "scripts": {},
+  "dependencies": {
+    "codeowners-query": "file:../../lib/dist/codeowners-query-0.0.1.tgz"
+  }
+}

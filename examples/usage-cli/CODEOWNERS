@@ -1,0 +1,6 @@
+/shared  @shared-team
+/lib     @lib-team
+*.txt    @text-team
+/docs    @doc-team @content-team @legal-team
+/generated
+/docs/_cache

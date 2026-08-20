@@ -1,0 +1,7 @@
+{
+  "name": "usage-cli",
+  "version": "1.0.0",
+  "description": "CLI usage example for codeowners-query",
+  "type": "module",
+  "scripts": {}
+}

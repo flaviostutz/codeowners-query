@@ -1,0 +1,108 @@
+---
+name: agentme-edr-policy-104-cli-tool-standards
+description: Defines how distributable CLI tools should separate command handling from library logic and expose consistent command behavior. Use when designing or reviewing CLI interfaces.
+apply-to: Projects with distributable CLI tools
+valid-from: 2026-05-25
+---
+
+# agentme-edr-policy-104: CLI tool standards
+
+## Context and Problem Statement
+
+CLI projects often mix command parsing, business logic, config loading, and output formatting in one entry point, making them hard to reuse as libraries and inconsistent to operate.
+
+What structure and interface rules should distributable CLI tools follow so they remain discoverable, scriptable, and reusable outside the command line?
+
+## Decision Outcome
+
+**Use a command-oriented CLI as a thin adapter over a standalone library, with CLI-owned config discovery, mandatory help/version/verbose flags, and consistent progress and exit behavior.**
+
+This keeps the user-facing command predictable while preserving a clean library API for embedding, testing, and automation.
+
+### Details
+
+#### CLI command surface
+
+- CLI tools SHOULD default to the format `[tool] [command] [options] [arguments]`.
+- Example: `filedist extract --packages=test mydir`
+- A single-action tool MAY omit `[command]` only when adding a subcommand would be artificial and there is no meaningful action split.
+- Every CLI tool MUST expose:
+  - `--help` on the root command
+  - `--version` on the root command
+  - `--verbose` on the root command and on subcommands when flags are parsed per command
+- Root `--help` output MUST list all available commands, key options, and usage examples. Command-specific help MUST describe that command's arguments and options.
+
+#### CLI to application separation
+
+- Structure the software as `cli -> app` — the CLI adapter delegates to the application layer, following [agentme-edr-126](126-pragmatic-hexagonal-architecture.md). For unit testing the application layer and mocking outbound connectors, follow [agentme-edr-126 rule `09`](126-pragmatic-hexagonal-architecture.md#09-unit-testing-and-mocking-strategy).
+- The CLI layer MUST only parse arguments, load config, call the application layer, and format output.
+- Domain logic MUST live in the application layer and be usable without CLI globals such as `argv`, `stdout`, or process exit handlers.
+- Every feature available through the CLI MUST also be available through the application API.
+- Organize the application layer by action so the mapping stays direct and obvious.
+  - `extract` command -> `app/extract(...)`
+  - `validate` command -> `app/validate(...)`
+- Avoid one generic `run()` entry point that hides action-specific contracts behind switches or string commands.
+
+#### Application API shape
+
+- Each CLI action SHOULD map to a dedicated exported application function with typed inputs and outputs appropriate for the language.
+- Application APIs SHOULD accept in-memory options objects or typed parameters, not require config files or environment variables unless application-level config-file support is an explicit requirement.
+- The CLI layer is responsible for translating flags, positional arguments, and config-file contents into application inputs.
+- The application layer SHOULD return explicit results and errors so the CLI can decide what to print and which exit code to use.
+
+#### Configuration
+
+- Prefer flags and positional arguments for simple inputs.
+- When configuration becomes long, nested, or repetitive, use a YAML config file instead of pushing all values into flags. See [agentme-edr-305](../platform/305-environment-variable-configuration.md) for when `.env` values should be referenced from within that file.
+- By default, config-file discovery and loading MUST happen in the CLI layer, not in the application layer.
+- When a config file is supported, the CLI MUST try to load a YAML file from `[cwd]/[tool-name].yml` by default.
+- The CLI MUST also support an explicit config path flag such as `--config`.
+- The application layer MUST NOT depend on the presence of the config file; it SHOULD receive parsed configuration values from the CLI layer.
+- The application layer MAY load or parse config files only when that behavior is an explicit requirement of the application contract for non-CLI consumers as well.
+
+#### Output and progress
+
+- Standard output MUST show a start message when work begins and a result message when work completes successfully.
+- When processing is long-running or multi-stage, print concise intermediate progress messages.
+- `--verbose` MUST reveal more internal detail about what the tool is doing without changing the meaning of the command result.
+- Default output SHOULD stay concise and readable for humans.
+- Errors SHOULD be written to standard error with an actionable message. Stack traces or raw internal errors SHOULD stay hidden by default and MAY be shown in verbose mode.
+
+#### Exit behavior
+
+- Exit with `0` only when the requested action completed successfully.
+- Exit with `1` when the requested action could not be completed.
+- The application layer SHOULD surface failure as return values, result objects, or language-idiomatic errors; the CLI is responsible for converting that outcome into user-facing messages and process exit codes.
+
+#### Documentation
+
+- `README.md` MUST include at least 4 CLI usage examples.
+- `README.md` MUST include at least 2 application API examples for the same operation also available through the CLI.
+- If the tool supports config files, at least 1 README example SHOULD show config-file usage.
+- Examples MUST use the public command and public application API, not internal modules or private files.
+
+#### Distribution and versioning
+
+- The implementation language is project-dependent, but the packaging and entry-point strategy MUST match how users are expected to run the tool.
+- Choose language tooling that stays compatible with ecosystem launchers such as `npx`, `pnpm dlx`, `uvx`, or equivalent distribution commands for that ecosystem.
+- `--version` MUST print the same version declared in the published package or release artifact metadata.
+- Do not hard-code a second version string that can drift from the published package version.
+- Language-specific project structure and packaging rules still apply and SHOULD be combined with this XDR, especially [agentme-edr-101](101-javascript-project-tooling.md), [agentme-edr-102](102-golang-project-tooling.md), and [agentme-edr-103](103-python-project-tooling.md).
+
+## Considered Options
+
+* (REJECTED) **Ad hoc CLIs with embedded business logic** - Keep parsing, processing, config loading, and output formatting inside a single entry point.
+  * Reason: Makes the tool hard to test, hard to reuse programmatically, and inconsistent across commands.
+* (CHOSEN) **Thin CLI adapter over action-oriented application APIs** - Keep the CLI responsible for user interaction and the application layer responsible for the actual behavior.
+  * Reason: Preserves a clean programmatic API, keeps command behavior discoverable, and makes the CLI-to-application mapping easy to maintain.
+
+## References
+
+- [agentme-edr-126](126-pragmatic-hexagonal-architecture.md) - Defines the adapter/application separation that the CLI layer follows
+- [agentme-edr-101](101-javascript-project-tooling.md) - JavaScript project packaging and structure
+- [agentme-edr-501](../governance/501-project-quality-standards.md) - README and examples baseline
+- [agentme-edr-303](../platform/303-common-targets.md) - Standard command names for project entry points
+- [agentme-edr-123](123-error-handling.md) - Process error signaling and error handling expectations
+- [agentme-edr-102](102-golang-project-tooling.md) - Go CLI structure and verbose logging baseline
+- [agentme-edr-103](103-python-project-tooling.md) - Python packaging and CLI entry-point guidance
+- [agentme-edr-305](../platform/305-environment-variable-configuration.md) - Environment variable configuration files; defines how `.env` values are referenced from YAML config files

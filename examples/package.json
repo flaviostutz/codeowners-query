@@ -1,0 +1,10 @@
+{
+  "name": "examples",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Runnable examples for codeowners-query",
+  "scripts": {},
+  "dependencies": {
+    "codeowners-query": "file:/Users/flaviostutz/Documents/development/flaviostutz/codeowners-query/lib/dist/codeowners-query-0.0.1.tgz"
+  }
+}

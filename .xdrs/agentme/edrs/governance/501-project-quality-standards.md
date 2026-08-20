@@ -1,0 +1,270 @@
+---
+name: agentme-edr-policy-501-project-quality-standards
+description: Defines minimum project quality standards for README onboarding, testing (unit, integration, and AI-tier evals), linting, XDR compliance, and runnable examples. Use when scaffolding or reviewing projects.
+apply-to: All projects
+valid-from: 2026-05-25
+---
+
+# agentme-edr-policy-501: Project quality standards
+
+## Context and Problem Statement
+
+Without a baseline quality bar, projects within the same organization can diverge significantly in documentation completeness, test coverage, linting discipline, and structural clarity. New developers encounter confusion, quality regressions slip through, and standards drift over time.
+
+What minimum quality standards must every project in the organization meet to ensure it is understandable, maintainable, and consistently verifiable?
+
+## Decision Outcome
+
+Every project MUST meet the minimum quality standards: a Getting Started section in its README, unit tests that run on every release, compliance with workspace XDRs, active linting enforcement, a structure that is clear to new developers, and — for libraries and utilities — a runnable examples folder verified on every test run. Integration tests are advised but not required. Projects with statistical models MUST have evaluation targets with performance thresholds.
+
+These standards form a non-negotiable baseline. Individual projects may raise the bar but MUST NOT fall below it.
+
+### Details
+
+#### 01-readme-must-have-getting-started
+
+`README.md` MUST include a **Getting Started** section in the first 20 lines with the minimal steps to install and use the project.
+
+**Required content:**
+- Installation or setup command(s)
+- At least one runnable usage example (code snippet, CLI command, or API call)
+
+**Required README structure:**
+
+````markdown
+# Project Name
+
+One-line description.
+
+## Getting Started
+
+```sh
+npm install my-package
+```
+
+```ts
+import { myFunction } from "my-package";
+myFunction({ input: "value" });
+```
+````
+
+---
+
+#### 02-unit-tests-must-run-on-every-release
+
+A unit test suite MUST run automatically before every release. Failing tests MUST block the release — no silent skips or overrides.
+
+**Requirements:**
+- A `make test` target MUST exist and run the full suite
+- CI/CD MUST invoke it before publish/deploy
+- Test failures block the release
+
+**Exception:** Projects with fewer than 100 lines of code, or whose `README.md` prominently marks them as a **Spike** or **Experiment**, are exempt from this requirement. Such projects MUST NOT be deployed to production.
+
+**Reference:** [agentme-edr-122](../application/122-unit-test-requirements.md) for detailed unit test requirements.
+
+---
+
+#### 03-project-must-comply-with-xdrs
+
+All XDRs that apply to the project's scope (as listed in [.xdrs/index.md](../../../index.md)) MUST be followed. A deviation requires a project-local XDR documenting the override.
+
+**Requirements:**
+- Review applicable XDRs before any significant implementation
+- If an XDR conflicts with project needs, create a `_local` XDR documenting the deviation
+
+---
+
+#### 04-project-must-have-linting
+
+Projects larger than 10 files or 200 lines of code MUST have a linter configured and actively enforced. Lint failures block CI builds.
+
+**Requirements:**
+- `make lint` runs the linter with zero-warning tolerance
+- `make lint-fix` auto-fixes fixable issues
+- Linter config is checked in (e.g., `.eslintrc.js`, `pyproject.toml`, `.golangci.yml`)
+- CI runs `make lint` before merging or releasing
+
+**Exception:** Projects with fewer than 100 lines of code, or whose `README.md` prominently marks them as a **Spike** or **Experiment**, are exempt from this requirement. Such projects MUST NOT be deployed to production.
+
+**Reference:** [agentme-edr-101](../application/101-javascript-project-tooling.md) for JavaScript-specific tooling.
+
+---
+
+#### 05-project-structure-must-be-clear
+
+Directory and file layout MUST be self-explanatory: source code, tests, configuration, and examples MUST be clearly separated and named.
+
+**Requirements:**
+- Directory names MUST reflect their purpose (`src/`, `lib/`, `tests/`, `examples/`, `docs/`)
+- README MUST describe the top-level layout if non-obvious
+- No orphaned or unexplained directories or files at the project root
+
+**Example layout (TypeScript project):**
+
+```
+/
+├── README.md
+├── Makefile
+├── lib/
+│   └── src/
+│       ├── index.ts
+│       └── *.test.ts
+└── examples/
+    └── basic-usage/
+```
+
+---
+
+#### 06-libraries-must-have-runnable-examples
+
+Projects that are libraries or shared utilities MUST include an `examples/` directory. Each subdirectory represents a usage scenario and MUST be independently runnable. Examples that are "offline" (require no external credentials, no running servers, no paid APIs, and no environment-specific configuration outside the repository) MUST be executed as part of `make test`. Examples that depend on external entities may be left out of `make test`.
+
+**Requirements:**
+- `examples/` MUST contain at least one subdirectory per major usage scenario
+- Each scenario subdirectory MUST have a `Makefile` with a `run` target
+- Examples MUST import the library as an external consumer (not via relative `../src` imports)
+- `make test` in the root MUST run all offline examples; failures block CI and releases
+- Examples that depend on external entities MUST NOT be included in `make test`
+
+**Directory layout:**
+
+```
+/
+├── Makefile
+├── lib/src/
+└── examples/
+    ├── Makefile
+    ├── basic-usage/
+    │   ├── Makefile      # targets: run
+    │   └── main.ts
+    └── advanced-usage/
+        ├── Makefile      # targets: run
+        └── main.ts
+```
+
+**Root Makefile:**
+
+```makefile
+# test-examples runs the examples offline (no external services) → include in test
+test: test-unit test-examples
+
+test-unit:
+	$(MAKE) -C lib test
+
+test-examples:
+	$(MAKE) -C examples
+```
+
+If examples require live services or credentials, remove `test-examples` from the `test` dependency list and keep it as a standalone named target only. See [agentme-edr-303](../platform/303-common-targets.md) rule 08 for the full offline/online decision table.
+
+**Examples Makefile:**
+
+```makefile
+all:
+	$(MAKE) -C basic-usage run
+	$(MAKE) -C advanced-usage run
+```
+
+---
+
+#### 07-statistical-models-must-have-eval-targets
+
+Projects that contain statistical models (e.g., ML models, LLM-based evaluators, classifiers, ranking systems, or any component whose output quality is measured probabilistically) MUST define measurable performance thresholds and verify them automatically.
+
+**Requirements:**
+- A `make eval` target MUST exist and execute all performance evaluations
+- Each evaluation MUST have a **documented minimum performance threshold** (e.g., accuracy ≥ 0.85, F1 ≥ 0.80, BLEU ≥ 0.70)
+- Thresholds and all scoring parameters MUST be declared as constants in `eval.py` — they are design decisions about acceptable quality for the component under test, not runtime configuration, and MUST NOT be passed as Makefile variables or CLI flags. See [agentme-edr-153](../application/153-ai-eval-script.md) rule `01`.
+- `make eval` MUST **exit with a non-zero status** (fail) if:
+  - The evaluation cannot be executed (missing data, environment errors, model load failures)
+  - Any metric falls below its defined minimum threshold
+- CI/CD MUST invoke `make eval` before releasing any version that changes model weights, prompts, or evaluation logic
+
+**Threshold declaration example (eval.py):**
+
+```python
+EVAL_MIN_ACCURACY = {"functional": 0.85, "smoke": 0.90}
+EVAL_MIN_F1 = {"functional": 0.80}
+
+# Thresholds are declared here and enforced by the script:
+if accuracy < EVAL_MIN_ACCURACY.get(test_type, 0):
+    raise SystemExit(f"Eval failed: {test_type} accuracy {accuracy:.2f} < {EVAL_MIN_ACCURACY[test_type]}")
+```
+
+**Makefile target (delegates to eval.py — no threshold variables here):**
+
+```makefile
+eval:
+	mise exec -- uv run --project . python eval.py --type=all
+```
+
+---
+
+#### 08-integration-tests-are-advised
+
+Integration tests verify end-to-end system behavior with real external dependencies (databases, APIs, message queues, file systems, cloud services). While not required, integration tests are strongly advised for projects that interact with external systems.
+
+**When to implement integration tests:**
+
+- The project makes calls to external APIs or services
+- The project reads from or writes to databases
+- The project integrates with third-party systems (payment processors, authentication providers, etc.)
+- The project's behavior depends on the interaction between multiple components or services
+- Unit tests alone cannot adequately verify system integration points
+
+**Integration test guidelines (when implemented):**
+
+- SHOULD verify end-to-end execution with real external dependencies or containerized equivalents (e.g., postgres in Docker, localstack for AWS services)
+- SHOULD use pass/fail assertions to validate expected behavior and error handling
+- SHOULD be isolated from unit tests to allow independent execution
+- Files SHOULD be named with a clear integration test suffix (e.g., `<name>_integration_test.py`, `<name>.integration.test.ts`)
+- MAY be run less frequently than unit tests (e.g., nightly, before releases) to manage execution time and external dependency costs
+- MAY use smaller or cheaper configurations of external services when available (e.g., smaller database instances, development-tier API keys)
+
+**Makefile target:**
+
+When integration tests exist, provide a dedicated `make test-integration` target:
+
+```makefile
+test: test-unit
+
+test-unit:
+	# Run fast offline unit tests
+	pytest lib/src/
+
+test-integration:
+	# Run integration tests with real dependencies
+	pytest lib/src/ -m integration
+```
+
+Projects are not required to implement integration tests, but when present, they SHOULD follow these conventions for consistency across the codebase.
+
+---
+
+#### 09-ai-project-testing-requirements
+
+AI projects are classified into three tiers — LLM, Agent, and Workflow — defined in [agentme-edr-141](../application/141-ai-llm-development-standards.md). Testing requirements differ per tier:
+
+| Tier | Unit tests | Evals | Integration tests |
+|---|---|---|---|
+| **LLM** ([agentme-edr-141](../application/141-ai-llm-development-standards.md)) | Not required | Not required; SHOULD be used when critical prompts are in use to measure accuracy and detect model drift | Not required |
+| **Agent** ([agentme-edr-142](../application/142-ai-agents-development-standards.md)) | Not required | Not required; MAY be used | Not required |
+| **Workflow** ([agentme-edr-144](../application/144-ai-workflow-development-standards.md)) | Required — see below | Required before every release; failed evals block release | Advised |
+
+**Workflow unit test requirements:**
+
+- MUST use mocked LLM providers. See [agentme-edr-141](../application/141-ai-llm-development-standards.md) rule `04-unit-test-mocking` for the mocking pattern.
+- MUST run offline with no external dependencies per [agentme-edr-122](../application/122-unit-test-requirements.md) rule `02-must-run-offline`.
+- MUST achieve 80% code coverage per [agentme-edr-122](../application/122-unit-test-requirements.md) rule `03-must-maintain-80-percent-coverage`.
+- MUST test workflow routing logic, conditional edges, state transformations, and error handling.
+- MUST achieve **80% coverage of LangGraph graph edges and branches**: every conditional edge MUST have test cases covering each possible branch, and every node→node transition MUST be exercised by at least one test.
+- Files MUST be named `<name>_test.py` and placed alongside the source file per [agentme-edr-122](../application/122-unit-test-requirements.md) rule `04-must-place-test-files-alongside-source`.
+
+**Workflow eval requirements:**
+
+- Evals MUST be executed before every release.
+- Accuracy below project-defined thresholds MUST block the release. Thresholds MUST be documented in the eval Makefile or README.
+- Evals MUST run against real LLM providers (not mocks) to capture model drift.
+- For eval folder structure and LLM-as-judge scoring, see [agentme-edr-151](../application/151-ai-eval-standards.md). For eval script requirements, see [agentme-edr-153](../application/153-ai-eval-script.md).
+- For the taxonomy of AI test types (safety, responsible-AI, quality-eval, prompt, code-level) and the golden dataset entry format, see [agentme-edr-152](../application/152-ai-test-types-taxonomy.md).

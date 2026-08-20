@@ -2,6 +2,21 @@
 
 Query owners involved given a list of file paths based on a CODEOWNERS file configuration.
 
+## Quick Start
+
+```bash
+pnpm add codeowners-query
+```
+
+```typescript
+import { owners, parseCodeowners } from 'codeowners-query';
+import * as fs from 'node:fs';
+
+const rules = parseCodeowners(fs.readFileSync('CODEOWNERS', 'utf-8'));
+const result = owners(['/src/main.ts'], rules);
+console.log(result); // e.g. ['@backend-team']
+```
+
 Given a `CODEOWNERS` file in the current directory, resolve which teams or users own one or more files. Supports all standard GitHub CODEOWNERS pattern syntax.
 
 ## Installation
@@ -50,15 +65,7 @@ npx codeowners-query owners /shared/nothing.dat
 # @shared-team
 ```
 
-### Example 4: non-existent file — owners resolved from path pattern only
-
-```bash
-cd repo1
-npx codeowners-query owners /inexistent.txt
-# @text-team
-```
-
-### Example 5: no matching rule — empty output
+### Example 4: no matching rule — empty output
 
 ```bash
 cd repo1
@@ -66,7 +73,7 @@ npx codeowners-query owners /mytest.dat
 # (empty line)
 ```
 
-### Custom CODEOWNERS file location
+### Example 5: custom CODEOWNERS file location
 
 ```bash
 npx codeowners-query owners /src/main.ts --codeowners-file /path/to/CODEOWNERS
@@ -76,13 +83,6 @@ npx codeowners-query owners /src/main.ts --codeowners-file /path/to/CODEOWNERS
 
 ```bash
 npx codeowners-query owners /src/main.ts --verbose
-```
-
-### Help
-
-```bash
-npx codeowners-query --help
-npx codeowners-query owners --help
 ```
 
 ## API usage
@@ -115,19 +115,24 @@ console.log(result); // ['@shared-team', '@text-team']
 
 ## Behaviour
 
-- **Paths**: both absolute (`/shared/test.txt`) and relative (`shared/test.txt`) are accepted; relative paths are normalized to absolute before matching.
+- **Paths**: both absolute (`/shared/test.txt`) and relative (`shared/test.txt`) are accepted.
 - **Output order**: owners are printed alphabetically, one per line.
 - **Deduplication**: owners are globally deduplicated across all input files and all matching rules.
 - **Empty output**: a single newline is printed when no rule matches; exit code is `0`.
 - **Missing CODEOWNERS**: exits with code `1` and an error on stderr.
-- **Pattern semantics**: follows GitHub CODEOWNERS rules — a pattern with no `/` matches at any depth; `/dir` matches all files recursively under `dir/`; a pattern ending in `/` matches all directory contents.
+- **Pattern semantics**: follows GitHub CODEOWNERS rules — a pattern with no `/` matches at any depth; `/dir` matches all files recursively under `dir/`.
 
 ## Development
 
 ```bash
-make setup   # install mise + pnpm dependencies
-make all     # build + lint + test
-make build   # compile TypeScript + bundle CLI with esbuild
-make test    # run Jest with coverage
-make lint    # run ESLint
+make build
+make lint
+make test
 ```
+
+See the sibling `examples/` folder for complete runnable examples that consume the packed artifact from `lib/dist/`.
+
+## License
+
+MIT
+
