@@ -23,7 +23,7 @@ packages:
     engines: {node: 20 || >=22}
 
   codeowners-query@file:../lib/dist/codeowners-query-0.0.1.tgz:
-    resolution: {integrity: sha512-eL3+Wt7ux4HDMJb7dXESvy98ABbxV3V8mtpj9394ew2KRwY9BIp1ABATxRvtEqnecES3bVsTfOhAPMrgT27dpg==, tarball: file:../lib/dist/codeowners-query-0.0.1.tgz}
+    resolution: {integrity: sha512-XInx27krdbaUPmbuVDW/TJfw9+KXE1JThwqPGgbZLP6vp18vMKyMHn+60x+vewZJeKU1ZmqK1BpEd2QNclhisg==, tarball: file:../lib/dist/codeowners-query-0.0.1.tgz}
     version: 0.0.1
     hasBin: true
 
