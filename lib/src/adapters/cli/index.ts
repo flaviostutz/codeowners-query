@@ -35,7 +35,7 @@ program
       text = fs.readFileSync(codeownersPath, 'utf8');
     } catch {
       process.stderr.write(`Error: CODEOWNERS file not found at ${codeownersPath}\n`);
-      process.exit(1);
+      throw new Error(`CODEOWNERS file not found at ${codeownersPath}`);
     }
 
     const rules = parseCodeowners(text);
